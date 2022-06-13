@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vue.js Web Application">
+  <link rel="stylesheet" href="./botui.css" />
+  <link rel="stylesheet" href="./botui-theme-default.css" />
+  <title>Vue2 component</title>
+  <style type="text/css">
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+<body>
+  <div id="app">
+    <div id="header">
+      <button v-on:click="add">addMessage</button>
+      <button v-on:click="remove">removeMessage</button>
+      <button v-on:click="remove_all">removeMessageAll</button>
+  </div>
+    <div id="body" class="botui-app-container">
+      <bot-ui ref="botui"></bot-ui>
+    </div>
+    <div id="footer">
+      <button v-on:click="bot">Ｂ</button>
+      <button v-on:click="human">Ｈ</button>
+      <input v-model="message" size="100">
+    </div>
+  </div>
+</body>
+<script src="./v2botui.js"></script>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'new message'
+  },
+  methods: {
+    add: function() {
+      this.$refs.botui.addMessage({ content: 'new message' });
+    },
+    bot: function() {
+      var addopt = { content: this.message };
+      this.$refs.botui.addMessage(addopt);
+    },
+    human: function() {
+      var addopt = { human: true, content: this.message };
+      this.$refs.botui.addMessage(addopt);
+    },
+    remove: function() {
+      this.$refs.botui.removeMessage(0);
+    },
+    remove_all: function() {
+      this.$refs.botui.removeMessageAll();
+    }
+  },
+  mounted: function() {
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+    this.$refs.botui.addMessage({ content: 'Hello World from bot!' });
+    this.$refs.botui.addMessage({ 
+      human: true, 
+      content: 'Hello World from human!' 
+    });
+  }
+});
+</script>
+</html>

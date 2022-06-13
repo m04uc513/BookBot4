@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vue.js Web Application">
+  <link rel="stylesheet" href="./botui.css" />
+  <link rel="stylesheet" href="./botui-theme-default.css" />
+  <title>Vue2 Compoment</title>
+  <style type="text/css">
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+<body>
+  <div id="app">
+    <div id="header">
+      <button v-on:click="start">開始</button>
+      <button v-on:click="stop">終了</button>
+      <button v-on:click="remove_all">消去</button>
+    </div>
+    <div id="body" class="botui-app-container">
+      <bot-ui ref="botui"></bot-ui>
+    </div>
+    <div id="footer">
+      <input type="text" readonly v-model="message" size="100">
+    </div>
+  </div>
+</body>
+<script src="./v2botui.js"></script>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    mode: 0,      // 0: text, 1: recognition, 2: synthesis
+    message: '',
+    recognition: new window.webkitSpeechRecognition(),
+    synthesis: window.speechSynthesis,
+    speech: new window.SpeechSynthesisUtterance()
+  },
+  mounted: function() {
+    // 発話の声色の設定
+    //this.speech.lang = "ja-JP";
+    //this.speech.name = "Kyoko";
+    this.speech.rate = 0.8;
+    this.speech.pitch = 1.2;
+  },
+  methods: {
+    // API
+    start: function() {
+      console.log("# start:");
+      this.reaction();
+    },
+    stop: function() {
+      console.log("# stop:");
+      this.mode = 0;
+    },
+    remove_all: function() {
+      console.log("# remove all");
+    },
+
+    // main-loop
+    reaction: async function() {
+      this.mode = 1;
+      console.log("reaction: ループ開始");
+
+      while (this.mode == 1) {
+        this.message = '';
+        await this.recognize();
+        if (this.message == '') continue;
+        //console.log("reaction: this.message = "+this.message);
+        this.human(this.message);
+        if (this.message == '終わり') break;
+
+        this.mode = 2;
+        var reply = this.message; // エコーバック
+        this.bot(reply);
+        await this.synthesize(reply);
+        this.mode = 1;
+      }
+
+      console.log("reaction: ループ終了");
+      this.mode = 0;
+    },
+
+    // recognition 
+    recognize: function() {
+      var self = this;
+      self.recognition.onresult = function(event) {
+        var result = event.results[0][0].transcript;
+        //console.log("# onresult: 結果: "+result);
+        self.message = result;
+        self.recognition.stop();
+      }
+      return(new Promise(function(resolve){
+        self.recognition.onend = resolve;
+        self.recognition.start();
+      }));
+    },
+
+    // synthesis
+    synthesize: function(message) {
+      var self = this;
+      self.speech.text = message;
+      return(new Promise(function(resolve){
+        self.speech.onend = resolve;
+        self.synthesis.speak(self.speech);
+      }));
+    },
+
+    // bot-ui
+    add: function(message) {
+      this.$refs.botui.addMessage({ content: message });
+    },
+    bot: function(message) {
+      var addopt = { content: message };
+      this.$refs.botui.addMessage(addopt);
+    },
+    human: function(message) {
+      var addopt = { human: true, content: message };
+      this.$refs.botui.addMessage(addopt);
+    },
+    remove: function() {
+      this.$refs.botui.removeMessage(0);
+    },
+    remove_all: function() {
+      this.$refs.botui.removeMessageAll();
+    }
+
+  }
+});
+</script>
+</html>

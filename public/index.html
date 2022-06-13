@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vue.js Web Application">
+  <title>Vue2 Compoment</title>
+  <style type="text/css">
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+<body>
+  <div id="app">
+    <div id="header">
+      <h2>BookBot4: Voice Programming Prototype</h2>
+    </div>
+    <div id="body">
+      <table>
+        <tr>
+          <td><A HREF="/v2-component.html">v2-component</A></td>
+          <td>BotUIコンポーネント化</td>
+        </tr>
+        <tr>
+          <td><A HREF="/v2-recognition.html">v2-recognition</A></td>
+          <td>音声認識と音声合成の統合</td>
+        </tr>
+      </table>
+    </div>
+    <div id="footer"></div>
+  </div>
+</body>
+<script>
+var app = new Vue({
+  el: '#app'
+});
+</script>
+</html>
